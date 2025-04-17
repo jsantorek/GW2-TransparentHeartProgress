@@ -1,0 +1,6 @@
+build
+.conan
+.venv
+.vscode
+clang
+CMakeUserPresets.json
