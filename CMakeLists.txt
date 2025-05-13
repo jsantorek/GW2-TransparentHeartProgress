@@ -28,7 +28,6 @@ target_link_libraries(${PROJECT_NAME}
     rcgg-nexus-api::rcgg-nexus-api
     ${RE_LIBs}
 )
-string(REGEX REPLACE "[^A-Z]" "" PROJECT_ACRONYM "${PROJECT_NAME}")
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         ADDON_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
@@ -36,7 +35,6 @@ target_compile_definitions(${PROJECT_NAME}
         ADDON_VERSION_PATCH=${PROJECT_VERSION_PATCH}
         ADDON_VERSION_REVISION=$<IF:$<BOOL:${PROJECT_VERSION_TWEAK}>,${PROJECT_VERSION_TWEAK},0>
         ADDON_NAME="${PROJECT_NAME}"
-        ADDON_ACRONYM="${PROJECT_ACRONYM}"
 )
 target_include_directories(${PROJECT_NAME}
     PRIVATE
