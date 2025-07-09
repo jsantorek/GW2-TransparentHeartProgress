@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*'  # Trigger only on version tags like v1.0.0
+      - 'v*'
 
 jobs:
   build:
@@ -27,13 +27,10 @@ jobs:
     - name: Run build steps in container
       run: |
         docker run --rm \
-          -v ${{ github.workspace }}:/workspace \
-          -w /workspace \
+          -v ${{ github.workspace }}:/addon \
           ghcr.io/jsantorek/gw2-addon-builder:latest \
           bash -c "
-            git config --global --add safe.directory /workspace &&
-            cd /workspace &&
-            /root/.local/bin/conan install . --build missing --profile windows &&
+            conan install . --build missing --profile windows-dynamic &&
             cmake --preset conan-release &&
             cmake --build --preset conan-release &&
             cmake --install build/Release --prefix install

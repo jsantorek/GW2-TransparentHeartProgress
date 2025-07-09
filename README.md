@@ -13,7 +13,19 @@ The Transparent Heart Progress addon provides a detailed and visually appealing 
 
 ### Notes
 - After enabling the addon you might need to leave and re-enter Renown Heart.
-- Known issue with ArcDPS unofficial extras: <span style="color:red;">Failed to inject hook 35</span>. Reportadly related to its hide hearts option, no known workaround.
+
+### Build
+Addon buildable with [Docker GW2 Addon Builder](https://github.com/jsantorek/GW2-AddonBuilder).
+```bash
+docker run --rm \
+    -v .:/addon \
+    gw2-addon-builder:latest \
+    bash -c "\
+        conan install . --build missing --profile windows-dynamic &&\
+        cmake --preset conan-release &&\
+        cmake --build --preset conan-release &&\
+        cmake --install build/Release --prefix install "
+```
 
 ### Support
 [![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/channels/410828272679518241/1371818213863718954)
