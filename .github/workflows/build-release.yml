@@ -1,0 +1,55 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger only on version tags like v1.0.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      packages: read
+      id-token: write
+
+    steps:
+    - name: Checkout repository with submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+        token: ${{ secrets.RE_REPO_ACCESS_TOKEN }}
+
+    - name: Pull Docker image
+      run: docker pull ghcr.io/jsantorek/gw2-addon-builder:latest
+
+    - name: Run build steps in container
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}:/workspace \
+          -w /workspace \
+          ghcr.io/jsantorek/gw2-addon-builder:latest \
+          bash -c "
+            conan install . &&
+            cmake --preset conan-release &&
+            cmake --build --preset conan-release &&
+            cmake --install --preset conan-release --prefix install
+          "
+
+    - name: Find DLL artifact
+      id: find_dll
+      run: |
+        DLL_PATH=$(find install -type f -name '*.dll' | head -n 1)
+        if [ -z "$DLL_PATH" ]; then
+          echo "No DLL found!" >&2
+          exit 1
+        fi
+        echo "dll_path=$DLL_PATH" >> "$GITHUB_OUTPUT"
+        
+    - name: Upload DLL to GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ steps.find_dll.outputs.dll_path }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
