@@ -36,7 +36,7 @@ jobs:
             /root/.local/bin/conan install . --build missing --profile windows &&
             cmake --preset conan-release &&
             cmake --build --preset conan-release &&
-            cmake --install /addon/build/Release --prefix install
+            cmake --install build/Release --prefix install
           "
 
     - name: Find DLL artifact
