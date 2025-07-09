@@ -18,8 +18,8 @@ The Transparent Heart Progress addon provides a detailed and visually appealing 
 Addon buildable with [Docker GW2 Addon Builder](https://github.com/jsantorek/GW2-AddonBuilder).
 ```bash
 docker run --rm \
-    -v .:/addon \
-    gw2-addon-builder:latest \
+    -v <repo-path>:/addon \
+    ghcr.io/jsantorek/gw2-addon-builder:latest \
     bash -c "\
         conan install . --build missing --profile windows-dynamic &&\
         cmake --preset conan-release &&\
