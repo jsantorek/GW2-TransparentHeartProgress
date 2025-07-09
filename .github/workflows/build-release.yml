@@ -31,10 +31,12 @@ jobs:
           -w /workspace \
           ghcr.io/jsantorek/gw2-addon-builder:latest \
           bash -c "
-            /root/.local/bin/conan install . --build=missing --profile windows &&
+            git config --global --add safe.directory /workspace &&
+            cd /workspace &&
+            /root/.local/bin/conan install . --build missing --profile windows &&
             cmake --preset conan-release &&
             cmake --build --preset conan-release &&
-            cmake --install --preset conan-release --prefix install
+            cmake --install /addon/build/Release --prefix install
           "
 
     - name: Find DLL artifact
