@@ -15,6 +15,8 @@ string(REGEX REPLACE "-dirty" ".1" PROJECT_VERSION ${PROJECT_VERSION})
 project(TransparentHeartProgress VERSION ${PROJECT_VERSION} LANGUAGES C CXX)
 
 find_package(rcgg-nexus-api)
+find_package(imgui)
+find_package(nlohmann_json)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/src-re/GW2RE.cmake)
 file(GLOB SRCs ${CMAKE_CURRENT_SOURCE_DIR}/src/*.[hc]pp)
@@ -26,6 +28,8 @@ add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
     rcgg-nexus-api::rcgg-nexus-api
+    imgui::imgui
+    nlohmann_json::nlohmann_json
     ${RE_LIBs}
 )
 target_compile_definitions(${PROJECT_NAME}

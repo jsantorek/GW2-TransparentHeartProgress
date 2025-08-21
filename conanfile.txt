@@ -1,5 +1,7 @@
 [requires]
 rcgg-nexus-api/v6.1
+imgui/1.80
+nlohmann_json/3.11.3
 
 [generators]
 CMakeDeps

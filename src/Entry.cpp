@@ -1,5 +1,7 @@
+#include "Config.hpp"
 #include <Hooks.hpp>
 #include <Nexus.h>
+#include <imgui.h>
 #include <stdexcept>
 
 void AddonLoad(AddonAPI *aApi);
@@ -33,9 +35,15 @@ AddonDefinition *GetAddonDef()
 void AddonLoad(AddonAPI *aApi)
 {
     G::APIDefs = aApi;
+    ImGui::SetCurrentContext(reinterpret_cast<ImGuiContext *>(G::APIDefs->ImguiContext));
+    ImGui::SetAllocatorFunctions(reinterpret_cast<void *(*)(size_t, void *)>(G::APIDefs->ImguiMalloc),
+                                 reinterpret_cast<void (*)(void *, void *)>(G::APIDefs->ImguiFree));
     try
     {
+        THP::Config::Load();
         THP::Hooks::Enable();
+
+        G::APIDefs->Renderer.Register(ERenderType_OptionsRender, THP::Config::Render);
     }
     catch (const std::runtime_error &e)
     {
@@ -46,5 +54,7 @@ void AddonLoad(AddonAPI *aApi)
 void AddonUnload()
 {
     THP::Hooks::Disable();
+    G::APIDefs->Renderer.Deregister(THP::Config::Render);
+    THP::Config::Save();
     G::APIDefs = nullptr;
 }
