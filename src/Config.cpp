@@ -1,4 +1,5 @@
 #include "Config.hpp"
+#include "Hooks.hpp"
 #include <Nexus.h>
 #include <algorithm>
 #include <filesystem>
@@ -43,9 +44,9 @@ void THP::Config::Save()
 }
 void THP::Config::Render()
 {
-    ImGui::Text("For changes to take effect you need to either:");
-    ImGui::BulletText("Re-enter renown heart task region");
-    ImGui::BulletText("Progress the task you are in");
     if (ImGui::InputInt("Decimal precision", &Decimals))
+    {
         Decimals = std::clamp(Decimals, DecimalsMin, DecimalsMax);
+        THP::Hooks::Refresh();
+    }
 }
