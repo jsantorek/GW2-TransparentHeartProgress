@@ -1,5 +1,5 @@
 #include "Config.hpp"
-#include "Hooks.hpp"
+#include "Addon.hpp"
 #include <Nexus.h>
 #include <algorithm>
 #include <filesystem>
@@ -47,6 +47,6 @@ void THP::Config::Render()
     if (ImGui::InputInt("Decimal precision", &Decimals))
     {
         Decimals = std::clamp(Decimals, DecimalsMin, DecimalsMax);
-        THP::Hooks::Refresh();
+        Addon::Reconfigure();
     }
 }

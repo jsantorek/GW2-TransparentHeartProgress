@@ -1,5 +1,5 @@
+#include "Addon.hpp"
 #include "Config.hpp"
-#include <Hooks.hpp>
 #include <Nexus.h>
 #include <imgui.h>
 #include <stdexcept>
@@ -41,7 +41,7 @@ void AddonLoad(AddonAPI *aApi)
     try
     {
         THP::Config::Load();
-        THP::Hooks::Enable();
+        Addon::SetUp(aApi);
 
         G::APIDefs->Renderer.Register(ERenderType_OptionsRender, THP::Config::Render);
     }
@@ -53,7 +53,7 @@ void AddonLoad(AddonAPI *aApi)
 
 void AddonUnload()
 {
-    THP::Hooks::Disable();
+    Addon::TearDown();
     G::APIDefs->Renderer.Deregister(THP::Config::Render);
     THP::Config::Save();
     G::APIDefs = nullptr;
