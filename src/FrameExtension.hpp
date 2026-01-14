@@ -17,7 +17,7 @@ class FrameExtension
     {
         auto lock = std::lock_guard(Mutex);
         if (IsInstalled())
-            return false;
+            return host == Host;
         if (host->ClassCount >= GW2RE::FrMsg_t::MaxClasses)
             return false;
         Host = host;
