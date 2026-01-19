@@ -5,6 +5,7 @@
 #include "Game/Frame/Frame.h"
 #include "Game/VdfContext.h"
 #include <Nexus.h>
+#include <mutex>
 
 class Addon final : private GW2RE::IVdfNotificationHandler, FrameExtension
 {
@@ -15,6 +16,7 @@ class Addon final : private GW2RE::IVdfNotificationHandler, FrameExtension
 
   private:
     Addon() = default;
+    void InitializeTieredTasks();
     void OnGameViewChanged(GW2RE::UNKNOWN, GW2RE::EGameView) override;
     void Proc(GW2RE::HDR_t *, void *, void *) override;
     void ExtendOblTask();
@@ -24,4 +26,5 @@ class Addon final : private GW2RE::IVdfNotificationHandler, FrameExtension
     static Addon *Self;
 
     CtlProgressText ProgressText;
+    std::once_flag HasInitialized;
 };
