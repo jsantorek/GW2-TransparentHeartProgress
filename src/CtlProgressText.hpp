@@ -27,6 +27,6 @@ class CtlProgressText : private GW2RE::ITaskNotificationHandler, public FrameExt
     uint32_t TextId = 0;
     bool IsAttached = false;
     GW2RE::AchievementDef_t *Achievement = nullptr;
-    std::optional<TieredHeart> Stats;
-    std::vector<GW2RE::AchievementDef_t *> RepeatableAchievements;
+    std::optional<TieredHeart> Stats = std::nullopt;
+    std::vector<GW2RE::AchievementDef_t *> RepeatableAchievements = {};
 };

@@ -95,7 +95,7 @@ void CtlProgressText::UpdateAchievementStats()
         }
         Stats->CurrentCompletions += rept.Repeatitions * TotalCount;
         Stats->CurrentCompletions += rept.Progress;
-        auto repeatitionsForMax = (ach->PointCap + TotalPoints - 1) / TotalPoints;
+        const auto repeatitionsForMax = (ach->PointCap + TotalPoints - 1) / TotalPoints;
         Stats->PointsMaxCompletions += repeatitionsForMax * TotalCount;
     }
     Achievement = nullptr;
