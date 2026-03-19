@@ -7,12 +7,26 @@ execute_process(
         ${CMAKE_CURRENT_SOURCE_DIR}
     OUTPUT_VARIABLE GIT_DESCRIBE_VERSION
     OUTPUT_STRIP_TRAILING_WHITESPACE
-    COMMAND_ERROR_IS_FATAL ANY
 )
+if(${GIT_DESCRIBE_VERSION})
+    string(REGEX REPLACE "^v" "" PROJECT_VERSION ${GIT_DESCRIBE_VERSION})
+    string(REGEX REPLACE "-dirty" ".1" PROJECT_VERSION ${PROJECT_VERSION})
+else()
+    string(TIMESTAMP TIMESTAMP_VERSION "%Y;%m;%d;%H%M" UTC)
+    set(PROJECT_VERSION "")
+    foreach(part IN LISTS TIMESTAMP_VERSION)
+        string(REGEX REPLACE "^0+([0-9])" "\\1" part "${part}")
+        if(part STREQUAL "")
+            list(APPEND PROJECT_VERSION "0")
+        else()
+            list(APPEND PROJECT_VERSION "${part}")
+        endif()
+    endforeach()
+    string(REPLACE ";" "." PROJECT_VERSION "${PROJECT_VERSION}")
+endif()
 
-string(REGEX REPLACE "^v" "" PROJECT_VERSION ${GIT_DESCRIBE_VERSION})
-string(REGEX REPLACE "-dirty" ".1" PROJECT_VERSION ${PROJECT_VERSION})
 project(TransparentHeartProgress VERSION ${PROJECT_VERSION} LANGUAGES C CXX)
+message("${PROJECT_NAME} v${PROJECT_VERSION}")
 
 find_package(rcgg-nexus-api)
 find_package(imgui)
