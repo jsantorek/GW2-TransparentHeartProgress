@@ -28,9 +28,10 @@ jobs:
     - name: Run build steps in container
       run: |
         docker run --rm \
-          -v ${{ github.workspace }}:/addon \
+          -v ${{ github.workspace }}:/${{ github.event.repository.name }} \
           ghcr.io/jsantorek/gw2-addon-builder:latest \
           bash -c "
+            cd /${{ github.event.repository.name }}
             conan install . --build missing --profile windows-dynamic &&
             cmake --preset conan-release &&
             cmake --build --preset conan-release &&
